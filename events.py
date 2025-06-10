@@ -6,8 +6,11 @@
 #
 # =======================================================
 
+import asyncio
 import requests
+import nest_asyncio
 from bs4 import BeautifulSoup
+from requests_html import AsyncHTMLSession
 
 
 def get_web_tickets_events():

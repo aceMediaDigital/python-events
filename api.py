@@ -21,6 +21,7 @@ def home():
 @app.get("/api/events")
 def read_event():
     web_tickets_events = get_web_tickets_events()
+    # howler_events = get_howler_music_events_sync()
     return {
         "web_tickets": web_tickets_events,
         "howler": []
