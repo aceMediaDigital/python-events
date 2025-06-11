@@ -8,6 +8,7 @@
 
 
 from flask import Flask
+from flask_restx import Api
 from events import get_web_tickets_events
 
 app = Flask(__name__)
@@ -15,18 +16,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "<p>Hello, World!</p>"
+    return "<h1>Hello, World!</h1>"
 
 
 @app.get("/api/events")
 def read_event():
-    web_tickets_events = get_web_tickets_events()
-    # howler_events = get_howler_music_events_sync()
+    # itemid = "1184163"
+    itemid = "1529499628"
+    web_tickets_events = get_web_tickets_events(itemid=itemid)
     return {
         "web_tickets": web_tickets_events,
-        "howler": []
     }
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=80)
+    app.run(debug=True)

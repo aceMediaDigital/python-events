@@ -13,8 +13,8 @@ from bs4 import BeautifulSoup
 from requests_html import AsyncHTMLSession
 
 
-def get_web_tickets_events():
-    url = "https://www.webtickets.co.za/v2/category.aspx?itemid=1184163&location=0&when=anytime"
+def get_web_tickets_events(itemid):
+    url = "https://www.webtickets.co.za/v2/category.aspx?itemid={itemid}&location=0&when=anytime"
     headers = {"User-Agent": "Mozilla/5.0"}
 
     response = requests.get(url, headers=headers)
@@ -59,4 +59,55 @@ def get_web_tickets_events():
 
     return events
 
+
+async def get_howler_music_events():
+    url = "https://www.howler.co.za/categories/17"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    session = AsyncHTMLSession()
+
+    response = await session.get(url, headers=headers)
+
+    async def render():
+        await response.html.arender(sleep=1, timeout=20)
+
+    asyncio.run(render())  # This must be in the main thread
+
+    if response.status_code != 200:
+        return {"error": "Failed to fetch data"}
+
+    event_cards = response.html.find(".grid__cell")
+
+    events = []
+    for card in event_cards:
+        title_el = card.find(".upcoming-event-card__title", first=True)
+        date_el = card.find(".upcoming-event-card__date", first=True)
+
+        title = title_el.text if title_el else None
+        date = date_el.text if date_el else None
+
+        if title or date:
+            events.append({
+                "title": title,
+                "date": date,
+            })
+
+    return {"howler": events}
+
+
+def get_howler_music_events_sync():
+    try:
+        loop = asyncio.get_event_loop()
+    except RuntimeError:
+        # No event loop in this thread, create a new one and set it
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    if loop.is_running():
+        # Patch to allow nested event loops
+        nest_asyncio.apply()
+        # Now we can run the async func within existing loop
+        return loop.run_until_complete(get_howler_music_events())
+    else:
+        # Normal case: just run it
+        return loop.run_until_complete(get_howler_music_events())
 
