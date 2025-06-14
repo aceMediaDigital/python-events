@@ -165,12 +165,30 @@ td, th {padding: 0;}
 body {
   font-family: 'Ubuntu','Roboto', sans-serif;
 }
-.body-style { background: silver; }
+.body-style { background: #4e4e4e; }
 
 .center-theme {
   height: 100vh;
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
 }
 
+.center-theme h1 { color: aliceblue; }
+.center-theme p {
+  color: #ccc;
+  font-size: 1em;
+}
+
+.top-right {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+.top-right p {margin: 0; padding: 0;}
+.links {
+    padding: 1rem;
+    background: #d6d6d6;
+    border-radius: 10px;
+}

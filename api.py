@@ -7,8 +7,9 @@
 # =======================================================
 
 
-from flask import Flask, render_template
+import flask
 from flask_restx import Api
+from flask import Flask, render_template
 from events import get_web_tickets_events
 
 app = Flask(__name__)
@@ -16,7 +17,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    flask_version = flask.__version__
+    return render_template('home.html', flask_version=flask_version)
 
 
 @app.get("/api/events")
